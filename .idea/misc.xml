@@ -6,7 +6,8 @@
         <entry key="app/src/main/res/drawable/ic_round_add_24.xml" value="0.194" />
         <entry key="app/src/main/res/drawable/round_corner_shape.xml" value="0.194" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1693840579710145" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/dialogue_layout.xml" value="0.1693840579710145" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.33" />
         <entry key="app/src/main/res/layout/topic_list_item.xml" value="0.33" />
       </map>
     </option>

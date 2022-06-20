@@ -15,8 +15,9 @@ import com.riyaz.notes.data.database.TopicDatabase
 import com.riyaz.notes.data.entety.Topic
 import com.riyaz.notes.databinding.FragmentHomeBinding
 import com.riyaz.notes.repository.TopicRepository
+import com.riyaz.notes.ui.dialoguefragment.TopicDialogueFragment
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListener {
 
     companion object {
         fun newInstance() = HomeFragment()
@@ -35,15 +36,23 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        binding.fab.setOnClickListener {
+            showDialogue()
+        }
 
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         topicAdapter = TopicAdapter()
 
         binding.recyclerView.adapter = topicAdapter
         binding.recyclerView.layoutManager = layoutManager
+
         observeTopics()
 
         return binding.root
+    }
+
+    private fun showDialogue() {
+        TODO("Not yet implemented")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -62,6 +71,10 @@ class HomeFragment : Fragment() {
                 topicAdapter.submitList(it)
             }
         })
+    }
+
+    override fun createTopic(topic: String, description: String) {
+        viewModel.persistNewTopic(topic, description)
     }
 }
 

@@ -11,7 +11,8 @@ class HomeViewModel(val repository: TopicRepository) : ViewModel() {
     // TODO: Implement the ViewModel
     val allTopics: LiveData<List<Topic>> = repository.topics.asLiveData()
 
-    fun persistNewTopic(topic: Topic){
+    fun persistNewTopic(title: String, description: String){
+        val topic: Topic = Topic(title,description,null,null,null)
         viewModelScope.launch {
             repository.insertTopic(topic)
         }
