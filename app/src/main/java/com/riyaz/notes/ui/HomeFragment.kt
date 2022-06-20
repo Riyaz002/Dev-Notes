@@ -6,8 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.riyaz.notes.R
 import com.riyaz.notes.data.database.TopicDatabase
+import com.riyaz.notes.data.entety.Topic
+import com.riyaz.notes.databinding.FragmentHomeBinding
 import com.riyaz.notes.repository.TopicRepository
 
 class HomeFragment : Fragment() {
@@ -19,12 +25,25 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var database: TopicDatabase
     private lateinit var repository: TopicRepository
+    private lateinit var binding: FragmentHomeBinding
+    private lateinit var topicAdapter: TopicAdapter
+    private lateinit var layoutManager: LinearLayoutManager
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+
+        layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        topicAdapter = TopicAdapter()
+
+        binding.recyclerView.adapter = topicAdapter
+        binding.recyclerView.layoutManager = layoutManager
+        observeTopics()
+
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -37,4 +56,12 @@ class HomeFragment : Fragment() {
         // TODO: Use the ViewModel
     }
 
+    private fun observeTopics() {
+        viewModel.allTopics.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                topicAdapter.submitList(it)
+            }
+        })
+    }
 }
+

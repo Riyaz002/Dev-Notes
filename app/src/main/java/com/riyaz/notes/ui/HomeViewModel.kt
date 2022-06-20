@@ -3,6 +3,8 @@ package com.riyaz.notes.ui
 import androidx.lifecycle.*
 import com.riyaz.notes.data.entety.Topic
 import com.riyaz.notes.repository.TopicRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeViewModel(val repository: TopicRepository) : ViewModel() {
@@ -12,6 +14,12 @@ class HomeViewModel(val repository: TopicRepository) : ViewModel() {
     fun persistNewTopic(topic: Topic){
         viewModelScope.launch {
             repository.insertTopic(topic)
+        }
+    }
+
+    fun deleteTopic(topicTitle: String){
+        viewModelScope.launch {
+            repository.deleteTopic(topicTitle)
         }
     }
 }
