@@ -6,13 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.riyaz.notes.R
 import com.riyaz.notes.data.database.TopicDatabase
-import com.riyaz.notes.data.entety.Topic
 import com.riyaz.notes.databinding.FragmentHomeBinding
 import com.riyaz.notes.repository.TopicRepository
 import com.riyaz.notes.ui.dialoguefragment.TopicDialogueFragment
@@ -46,34 +47,34 @@ class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListene
         binding.recyclerView.adapter = topicAdapter
         binding.recyclerView.layoutManager = layoutManager
 
-        observeTopics()
-
         return binding.root
     }
 
     private fun showDialogue() {
-        TODO("Not yet implemented")
+       val dialogFragment = TopicDialogueFragment(this)
+        dialogFragment.show(parentFragmentManager,"Topic Dialogue")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        // TODO: Use the ViewModel
         database = TopicDatabase.getDatabase(requireContext())
         repository = TopicRepository(database.topicDao())
-
         viewModel = ViewModelProvider(this, HomeFragmentViewModelFactory(repository)).get(HomeViewModel::class.java)
-        // TODO: Use the ViewModel
+        observeTopics()
     }
 
     private fun observeTopics() {
         viewModel.allTopics.observe(viewLifecycleOwner, Observer {
             it?.let {
+                Toast.makeText(requireContext(), "topic: ${it[0].title}", Toast.LENGTH_SHORT).show()
                 topicAdapter.submitList(it)
             }
         })
     }
 
     override fun createTopic(topic: String, description: String) {
+        //Toast.makeText(requireContext(), "Selected Topic: $topic", Toast.LENGTH_SHORT).show()
         viewModel.persistNewTopic(topic, description)
     }
 }

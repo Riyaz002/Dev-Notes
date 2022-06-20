@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 @Entity
 data class Steps(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo(name="title") val title: String,
-    @ColumnInfo(name="sub_steps") val subSteps: List<String>
+    @ColumnInfo(name="step_title") val title: String?,
+    @ColumnInfo(name="sub_steps") val subSteps: String?
 )

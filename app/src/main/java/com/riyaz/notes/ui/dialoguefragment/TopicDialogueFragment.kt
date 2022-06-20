@@ -13,15 +13,16 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.button.MaterialButton
 import com.riyaz.notes.R
+import com.riyaz.notes.ui.HomeFragment
 
-class TopicDialogueFragment: DialogFragment() {
+class TopicDialogueFragment(var homeFrag: HomeFragment?): DialogFragment() {
 
-    lateinit var listener: MyDialogueCallbackListener
+    private var listener: MyDialogueCallbackListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = layoutInflater.inflate(R.layout.dialogue_layout,null , false)
-        val create = view.findViewById<MaterialButton>(R.id.dialog_create_button)
-        val alertDialogBuilder = AlertDialog.Builder(parentFragment?.context)
+
+        val alertDialogBuilder = AlertDialog.Builder(context)
             alertDialogBuilder.setView(view)
                 .setTitle("New Topic")
                 .setNegativeButton("CANCEL",getCancelOnClickListener())
@@ -31,10 +32,12 @@ class TopicDialogueFragment: DialogFragment() {
 
     private fun getCreateOnClickListener(view: View, context: Context?): DialogInterface.OnClickListener? {
         val listener = DialogInterface.OnClickListener { dialogInterface, i ->
-            listener = context as MyDialogueCallbackListener
+            listener = homeFrag as MyDialogueCallbackListener
             val topic = view.findViewById<TextView>(R.id.dialog_et_title).text.toString()
             val description = view.findViewById<TextView>(R.id.dialog_et_description).text.toString()
-            listener.createTopic(topic, description)
+            listener?.createTopic(topic, description)
+            listener = null;
+            homeFrag = null;
         }
         return listener
     }

@@ -13,6 +13,6 @@ class TopicRepository(private val topicDao: TopicDao) {
     }
 
     suspend fun deleteTopic(title: String){
-        topicDao.deleteTopic(title)
+        //topicDao.deleteTopic(title)
     }
 }

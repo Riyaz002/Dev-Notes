@@ -13,8 +13,7 @@ class TopicAdapter: ListAdapter<Topic, TopicAdapter.TopicViewHolder>(TopicDiffCa
     class TopicViewHolder(private val binding: TopicListItemBinding): RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: Topic) {
-            binding.title.text = item.title
-            binding.description.text = item.description
+            binding.topic = item
         }
 
         companion object{

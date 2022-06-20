@@ -1,14 +1,14 @@
 package com.riyaz.notes.data.database
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 import com.riyaz.notes.data.dao.TopicDao
 import com.riyaz.notes.data.entety.Topic
+import com.riyaz.notes.util.TypeConvertor
 
 @Database(entities = [Topic::class], version = 1, exportSchema = false)
-abstract class TopicDatabase(val appContext: Context): RoomDatabase() {
+@TypeConverters(TypeConvertor::class)
+abstract class TopicDatabase: RoomDatabase() {
     abstract fun topicDao(): TopicDao
 
     companion object{

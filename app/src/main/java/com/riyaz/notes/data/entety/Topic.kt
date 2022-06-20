@@ -9,7 +9,11 @@ import androidx.room.PrimaryKey
 data class Topic(
     @PrimaryKey var title: String,
     @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "notes") val notes: List<String>?,
+    @ColumnInfo(name = "notes") val notes: List<String?>?,
     @ColumnInfo(name = "version_range") val versionRange: String?,
     @Embedded val steps: Steps?
-)
+){
+    constructor(title: String, description: String): this(title, description, null, null, null){
+
+    }
+}
