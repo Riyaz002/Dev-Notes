@@ -1,3 +1,3 @@
 # Dev-Notes
-##on-progress
-###It is an android application.
+## on-progress
+### It is an android application.
