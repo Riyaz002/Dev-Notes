@@ -66,8 +66,10 @@ class TopicDetailFragment : Fragment() {
     }
 
     private fun navigateBack() {
+
         val activity = activity as MainActivity
-        activity.supportFragmentManager.beginTransaction().replace(R.id.fragment_view, HomeFragment()).commit()
+        activity.supportFragmentManager.popBackStack()
+//        activity.supportFragmentManager.beginTransaction().replace(R.id.fragment_view, HomeFragment()).commit()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

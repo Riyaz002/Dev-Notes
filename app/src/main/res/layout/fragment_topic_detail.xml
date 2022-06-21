@@ -38,7 +38,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_margin="@dimen/spacing_normal"
+                    android:layout_marginStart="@dimen/spacing_normal"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:layout_marginEnd="@dimen/spacing_normal"
+                    android:layout_marginBottom="@dimen/spacing_normal"
                     android:backgroundTint="#00000000"
                     android:clickable="true"
                     android:contentDescription="button to delete topic"
@@ -50,38 +53,44 @@
                     app:srcCompat="@drawable/ic_baseline_delete_24"
                     app:tint="@color/primaryDarkColor" />
 
-                <TextView
-                    android:id="@+id/detail_title"
+                <LinearLayout
+                    android:id="@+id/header_linear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginHorizontal="@dimen/spacing_normal"
-                    android:layout_marginTop="@dimen/spacing_normal"
-                    android:layout_marginBottom="@dimen/spacing_small"
-                    android:text="@{viewModel.topic.title}"
-                    android:textSize="48sp"
-                    tools:text="Title" />
+                    android:layout_marginVertical="@dimen/spacing_normal"
+                    android:layout_toLeftOf="@id/btn_topic_delete"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/detail_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/detail_title"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginHorizontal="@dimen/spacing_normal"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_marginBottom="@dimen/spacing_normal"
-                    android:lineSpacingMultiplier="1.2"
-                    android:text="@{viewModel.topic.description}"
-                    android:textSize="18sp"
-                    tools:text="Description" />
+                    <TextView
+                        android:id="@+id/detail_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/spacing_normal"
+                        android:layout_marginBottom="@dimen/spacing_small"
+                        android:text="@{viewModel.topic.title}"
+                        android:textSize="48sp"
+                        tools:text="Title" />
+
+                    <TextView
+                        android:id="@+id/detail_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/spacing_normal"
+                        android:layout_marginStart="@dimen/spacing_normal"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:lineSpacingMultiplier="1.2"
+                        android:text="@{viewModel.topic.description}"
+                        android:textSize="18sp"
+                        tools:text="Description" />
+
+                </LinearLayout>
+
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/detail_description"
+                    android:layout_below="@+id/header_linear"
                     android:layout_alignParentEnd="true"
                     android:layout_marginHorizontal="@dimen/spacing_normal"
                     android:layout_marginVertical="@dimen/spacing_normal"
