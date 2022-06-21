@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    android:layout_above="@+id/home_frag"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -18,9 +17,11 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
+            style="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary"
             android:elevation="7dp"
-            android:background="@color/white"
+            android:layout_marginBottom="@dimen/spacing_small"
+            android:background="@color/primaryColor"
             app:title="Topics"
             app:titleTextColor="@color/cardview_dark_background"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,9 +48,7 @@
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/ShapeAppearanceOverlay.Material3.FloatingActionButton"
-            android:backgroundTint="@color/teal_200"
-            app:tint="#087369"
+            android:backgroundTint="@color/secondaryColor"
             android:layout_margin="@dimen/spacing_large"
             app:srcCompat="@drawable/ic_round_add_24"
              />

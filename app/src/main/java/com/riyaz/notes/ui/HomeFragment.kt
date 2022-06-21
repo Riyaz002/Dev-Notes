@@ -67,7 +67,6 @@ class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListene
     private fun observeTopics() {
         viewModel.allTopics.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Toast.makeText(requireContext(), "topic: ${it[0].title}", Toast.LENGTH_SHORT).show()
                 topicAdapter.submitList(it)
             }
         })
