@@ -11,14 +11,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/round_corner_shape"
         tools:context=".ui.HomeFragment">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary"
             android:elevation="7dp"
             android:layout_marginBottom="@dimen/spacing_small"
             android:background="@color/primaryColor"

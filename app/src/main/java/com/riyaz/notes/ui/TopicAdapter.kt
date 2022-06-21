@@ -40,7 +40,7 @@ class TopicAdapter: ListAdapter<Topic, TopicAdapter.TopicViewHolder>(TopicDiffCa
                 topicDetailFragment.arguments = bundle
 
                 val activity = binding.root.context as MainActivity
-                activity.supportFragmentManager.beginTransaction().replace(R.id.fragment_view, topicDetailFragment).commit()
+                activity.supportFragmentManager.beginTransaction().replace(R.id.fragment_view, topicDetailFragment).addToBackStack("TopicDetailFragment").commit()
             }
         }
 

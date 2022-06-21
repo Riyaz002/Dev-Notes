@@ -9,8 +9,11 @@ interface TopicDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addTopic(topic: Topic)
 
-    //@Query("SELECT * FROM topic_table WHERE title==:title")
-    //suspend fun deleteTopic(title: String)
+    @Delete
+    suspend fun deleteTopic(topic: Topic)
+
+    @Query("SELECT * FROM topic_table WHERE title==:title")
+    suspend fun getTopic(title: String): Topic
 
     @Query("SELECT * FROM topic_table")
     fun getAllTopics(): Flow<List<Topic>>

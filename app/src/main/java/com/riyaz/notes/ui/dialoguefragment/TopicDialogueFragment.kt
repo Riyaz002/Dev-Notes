@@ -24,17 +24,17 @@ class TopicDialogueFragment(var homeFrag: HomeFragment?): DialogFragment() {
     private lateinit var binding: DialogueLayoutBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val binding = DataBindingUtil.inflate<DialogueLayoutBinding>(layoutInflater, R.layout.dialogue_layout, null, false)
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.dialogue_layout, null, false)
 
         val alertDialogBuilder = AlertDialog.Builder(context)
             alertDialogBuilder.setView(binding.root)
                 .setTitle("New Topic")
-                .setNegativeButton("CANCEL",getCancelOnClickListener())
-                .setPositiveButton("CREATE", getCreateOnClickListener(binding.root))
+                .setNegativeButton("CANCEL", getCancelOnClickListener())
+                .setPositiveButton("CREATE", getCreateOnClickListener())
         return alertDialogBuilder.create()
     }
 
-    private fun getCreateOnClickListener(view: View): DialogInterface.OnClickListener? {
+    private fun getCreateOnClickListener(): DialogInterface.OnClickListener? {
         val listener = DialogInterface.OnClickListener { dialogInterface, i ->
             listener = homeFrag as MyDialogueCallbackListener
             val topic = binding.dialogEtTitle.editText?.text.toString()

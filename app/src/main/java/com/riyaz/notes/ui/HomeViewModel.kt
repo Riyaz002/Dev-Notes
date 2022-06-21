@@ -16,9 +16,9 @@ class HomeViewModel(val repository: TopicRepository) : ViewModel() {
         }
     }
 
-    fun deleteTopic(topicTitle: String){
+    fun deleteTopic(topic: Topic){
         viewModelScope.launch {
-            repository.deleteTopic(topicTitle)
+            repository.deleteTopic(topic)
         }
     }
 }

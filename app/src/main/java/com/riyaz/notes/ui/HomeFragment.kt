@@ -31,6 +31,9 @@ class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListene
     private lateinit var topicAdapter: TopicAdapter
     private lateinit var layoutManager: LinearLayoutManager
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
