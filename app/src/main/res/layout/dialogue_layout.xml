@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginHorizontal="@dimen/spacing_normal"
+            app:errorEnabled="true"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="@dimen/spacing_small"
             android:hint="title..."
@@ -33,6 +34,7 @@
             android:layout_marginTop="16dp"
             android:layout_below="@id/dialog_et_title"
             android:layout_marginBottom="@dimen/spacing_small"
+            app:errorEnabled="true"
             android:hint="description..."
             app:hintEnabled="true">
 

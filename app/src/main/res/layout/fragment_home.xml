@@ -13,18 +13,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.HomeFragment">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="7dp"
-            android:layout_marginBottom="@dimen/spacing_small"
-            android:background="@color/primaryColor"
-            app:title="Topics"
-            app:titleTextColor="@color/cardview_dark_background"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="0dp"
@@ -32,8 +20,10 @@
             android:fadingEdge="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             tools:itemCount="5"
             tools:listitem="@layout/topic_list_item" />
 
