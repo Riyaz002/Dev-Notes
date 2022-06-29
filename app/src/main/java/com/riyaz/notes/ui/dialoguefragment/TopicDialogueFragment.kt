@@ -11,10 +11,12 @@ import com.riyaz.notes.MainActivity
 import com.riyaz.notes.R
 import com.riyaz.notes.databinding.DialogueLayoutBinding
 import com.riyaz.notes.ui.HomeFragment
+import com.riyaz.notes.ui.topicdetail.DialogueOutsideTouchListeners
 
 class TopicDialogueFragment : DialogFragment() {
 
     private var listener: MyDialogueCallbackListener? = null
+    lateinit var dialogueOutsideTouchListeners: DialogueOutsideTouchListeners
     private lateinit var binding: DialogueLayoutBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -36,6 +38,7 @@ class TopicDialogueFragment : DialogFragment() {
                 .setTitle("New Topic")
                 .setNegativeButton("CANCEL", getCancelOnClickListener())
                 .setPositiveButton("CREATE", getCreateOnClickListener())
+        dialogueOutsideTouchListeners = (activity as MainActivity).supportFragmentManager.findFragmentById(R.id.fragment_view) as DialogueOutsideTouchListeners
         return alertDialogBuilder.create()
     }
 
@@ -58,5 +61,10 @@ class TopicDialogueFragment : DialogFragment() {
 
     interface MyDialogueCallbackListener{
         fun createTopic(topic: String, description: String);
+    }
+
+    override fun onDestroy() {
+        dialogueOutsideTouchListeners.touchedOutside()
+        super.onDestroy()
     }
 }

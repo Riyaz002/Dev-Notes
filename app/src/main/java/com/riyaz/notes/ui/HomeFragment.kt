@@ -17,8 +17,9 @@ import com.riyaz.notes.data.database.TopicDatabase
 import com.riyaz.notes.databinding.FragmentHomeBinding
 import com.riyaz.notes.repository.TopicRepository
 import com.riyaz.notes.ui.dialoguefragment.TopicDialogueFragment
+import com.riyaz.notes.ui.topicdetail.DialogueOutsideTouchListeners
 
-class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListener, SearchView.OnQueryTextListener {
+class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListener, SearchView.OnQueryTextListener, DialogueOutsideTouchListeners {
 
     companion object {
         fun newInstance() = HomeFragment()
@@ -98,11 +99,15 @@ class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListene
     }
     private fun searchTopics(query: String?){
         val searchQuery = "%$query%"
-        viewModel.searchTopics(searchQuery)?.observe(viewLifecycleOwner, Observer {
+        viewModel.searchTopics(searchQuery).observe(viewLifecycleOwner, Observer {
             it?.let {
                 topicAdapter.submitList(it)
             }
         })
+    }
+
+    override fun touchedOutside() {
+
     }
 }
 

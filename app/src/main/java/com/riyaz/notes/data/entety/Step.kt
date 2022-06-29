@@ -1,5 +1,6 @@
 package com.riyaz.notes.data.entety
 
+import android.accounts.AuthenticatorDescription
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -14,4 +15,3 @@ data class Step(
     @ColumnInfo(name="step_title") val title: String?,
     @ColumnInfo(name="sub_steps") val explanation: String?
 )
-

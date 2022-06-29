@@ -26,6 +26,9 @@ interface TopicDao {
     @Query("SELECT * FROM topic_table WHERE title LIKE :query")
     fun getSearchTopics(query: String): Flow<List<Topic>>
 
+    @Query("UPDATE topic_table SET steps = :step WHERE title = :title")
+    suspend fun addStep(title: String, step: MutableList<Step>)
+
 //    @Query("SELECT steps FROM topic_table WHERE title==:title")
 //    fun getSteps(title: String): Flow<List<Step>?>
 }

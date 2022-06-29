@@ -11,8 +11,8 @@ data class Topic(
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "notes") val notes: List<String?>?,
     @ColumnInfo(name = "version_range") val versionRange: String?,
-    @ColumnInfo(name = "steps") val steps: List<Step>?
+    @ColumnInfo(name = "steps") val steps: MutableList<Step>?
 ){
     constructor(title: String, description: String): this(title, description, null, null, null){}
-    constructor(title: String, description: String, steps: List<Step>): this(title, description, null, null, steps){}
+    constructor(title: String, description: String, steps: MutableList<Step>): this(title, description, null, null, steps){}
 }

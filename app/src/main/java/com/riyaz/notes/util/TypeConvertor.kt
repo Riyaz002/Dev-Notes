@@ -20,18 +20,26 @@ object TypeConvertor {
     }
 
     @TypeConverter
-    fun toSteps(stepsString: String?): List<Step>?{
-        if(stepsString == null) return null
+    fun toSteps(stepsString: String?): MutableList<Step>? {
+        if (stepsString == null) return null
         val list = stepsString.split("%step%")
         val stepList = mutableListOf<Step>()
         list.forEach { stepInString ->
-            val id = stepInString.substring(stepInString.indexOf("id=")+3, stepInString.indexOf(", title="))
-            val title = stepInString.substring(stepInString.indexOf(", title=")+8, stepInString.indexOf(", explanation="))
-            val explanation = stepInString.substring(stepInString.indexOf(", explanation=")+14, stepInString.length-1)
-            if(id!="null") stepList.add(Step(id?.toInt(),title,explanation))
-            else stepList.add(Step(null,title,explanation))
+            val id = stepInString.substring(
+                stepInString.indexOf("id=") + 3,
+                stepInString.indexOf(", title=")
+            )
+            val title = stepInString.substring(
+                stepInString.indexOf(", title=") + 8,
+                stepInString.indexOf(", explanation=")
+            )
+            val explanation = stepInString.substring(
+                stepInString.indexOf(", explanation=") + 14,
+                stepInString.length - 1
+            )
+            if (id != "null") stepList.add(Step(id?.toInt(), title, explanation))
+            else stepList.add(Step(null, title, explanation))
         }
-        val newList = stepList.toList()
-        return newList
+        return stepList.toMutableList()
     }
 }

@@ -30,7 +30,7 @@ import com.riyaz.notes.ui.notesfragment.NotesFragment
 const val TITLE = "title"
 const val DESCRIPTION = "description"
 
-class TopicDetailFragment : Fragment(), StepDialogueFragment.MyDialogueCallbackListener {
+class TopicDetailFragment : Fragment(), StepDialogueFragment.MyDialogueCallbackListener, DialogueOutsideTouchListeners {
 
     private lateinit var binding: FragmentTopicDetailBinding
     private lateinit var dialogue: AlertDialog.Builder
@@ -100,6 +100,7 @@ class TopicDetailFragment : Fragment(), StepDialogueFragment.MyDialogueCallbackL
         if(!isDialogueOpen){
             val stepDialogueFragment = StepDialogueFragment()
             stepDialogueFragment.show(parentFragmentManager, null)
+            isDialogueOpen=true
         }
     }
     private fun navigateBack() {
@@ -131,9 +132,20 @@ class TopicDetailFragment : Fragment(), StepDialogueFragment.MyDialogueCallbackL
     }
 
     override fun addStep(title: String, description: String) {
+        isDialogueOpen = false
+
         if(title.isNotEmpty() && description.isNotEmpty()){
+            //Toast.makeText(requireContext(), "adding step", Toast.LENGTH_SHORT).show()
             viewModel.addStep(title, description)
         }
     }
+
+    override fun touchedOutside() {
+        isDialogueOpen=false
+    }
+}
+
+interface DialogueOutsideTouchListeners{
+    fun touchedOutside()
 }
 

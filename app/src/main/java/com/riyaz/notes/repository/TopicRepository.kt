@@ -33,6 +33,10 @@ class TopicRepository(private val topicDao: TopicDao) {
 //        return topicDao.getSteps(title)
 //    }
 
+    suspend fun addStep(title: String, step: MutableList<Step>){
+        topicDao.addStep(title, step)
+    }
+
 
     fun getSearchedTopic(query: String): Flow<List<Topic>>{
         return topicDao.getSearchTopics(query)

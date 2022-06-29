@@ -15,10 +15,12 @@ import com.riyaz.notes.MainActivity
 import com.riyaz.notes.R
 import com.riyaz.notes.databinding.DialogueLayoutBinding
 import com.riyaz.notes.ui.HomeFragment
+import com.riyaz.notes.ui.topicdetail.DialogueOutsideTouchListeners
 
 class StepDialogueFragment(): DialogFragment() {
 
     private var listener: MyDialogueCallbackListener? = null
+    private lateinit var outsideTouchListeners: DialogueOutsideTouchListeners
     private lateinit var binding: DialogueLayoutBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -40,6 +42,7 @@ class StepDialogueFragment(): DialogFragment() {
                 .setTitle("Add Step")
                 .setNegativeButton("CANCEL", getCancelOnClickListener())
                 .setPositiveButton("ADD", getCreateOnClickListener())
+        outsideTouchListeners = (activity as MainActivity).supportFragmentManager.findFragmentById(R.id.fragment_view) as DialogueOutsideTouchListeners
         return alertDialogBuilder.create()
     }
 
@@ -62,5 +65,10 @@ class StepDialogueFragment(): DialogFragment() {
 
     interface MyDialogueCallbackListener{
         fun addStep(title: String, description: String);
+    }
+
+    override fun onDestroy() {
+        outsideTouchListeners.touchedOutside()
+        super.onDestroy()
     }
 }
