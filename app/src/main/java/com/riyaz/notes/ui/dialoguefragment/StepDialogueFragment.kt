@@ -4,17 +4,12 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.widget.FrameLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
-import androidx.fragment.app.FragmentManager
 import com.riyaz.notes.MainActivity
 import com.riyaz.notes.R
 import com.riyaz.notes.databinding.DialogueLayoutBinding
-import com.riyaz.notes.ui.HomeFragment
 import com.riyaz.notes.ui.topicdetail.DialogueOutsideTouchListeners
 
 class StepDialogueFragment(): DialogFragment() {
@@ -40,31 +35,29 @@ class StepDialogueFragment(): DialogFragment() {
         val alertDialogBuilder = AlertDialog.Builder(activity)
             alertDialogBuilder.setView(binding.root)
                 .setTitle("Add Step")
-                .setNegativeButton("CANCEL", getCancelOnClickListener())
-                .setPositiveButton("ADD", getCreateOnClickListener())
+                .setNegativeButton("CANCEL", cancelListener())
+                .setPositiveButton("ADD", createListener())
         outsideTouchListeners = (activity as MainActivity).supportFragmentManager.findFragmentById(R.id.fragment_view) as DialogueOutsideTouchListeners
         return alertDialogBuilder.create()
     }
 
-    private fun getCreateOnClickListener(): DialogInterface.OnClickListener? {
+    private fun createListener(): DialogInterface.OnClickListener {
         val listener = DialogInterface.OnClickListener { dialogInterface, i ->
             listener = (activity as MainActivity).supportFragmentManager.findFragmentById(R.id.fragment_view) as MyDialogueCallbackListener
             val title = binding.dialogEtTitle.editText?.text.toString()
             val description = binding.dialogEtDescription.editText?.text.toString()
-            listener?.addStep(title, description)
+            listener?.create(title, description)
             listener = null;
         }
         return listener
     }
 
-    private fun getCancelOnClickListener(): DialogInterface.OnClickListener? {
+    private fun cancelListener(): DialogInterface.OnClickListener {
         val listener = DialogInterface.OnClickListener { dialogInterface, i ->
+            listener = (activity as MainActivity).supportFragmentManager.findFragmentById(R.id.fragment_view) as MyDialogueCallbackListener
+            listener!!.cancel();
         }
         return listener
-    }
-
-    interface MyDialogueCallbackListener{
-        fun addStep(title: String, description: String);
     }
 
     override fun onDestroy() {

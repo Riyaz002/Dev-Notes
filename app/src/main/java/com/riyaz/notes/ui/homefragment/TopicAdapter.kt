@@ -1,22 +1,13 @@
 package com.riyaz.notes.ui
 
-import android.app.Activity
-import android.content.Context
-import android.inputmethodservice.InputMethodService
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
-import androidx.fragment.app.FragmentContainerView
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.FragmentTransitionSupport
 import com.riyaz.notes.MainActivity
 import com.riyaz.notes.R
 import com.riyaz.notes.data.entety.Topic
@@ -34,8 +25,9 @@ class TopicAdapter: ListAdapter<Topic, TopicAdapter.TopicViewHolder>(TopicDiffCa
             binding.topic = item
             binding.root.setOnClickListener {
                 //Toast.makeText(binding.root.context, "Topic: ${item.title}", Toast.LENGTH_SHORT).show()
-                val bundle: Bundle = Bundle()
-                bundle.putString(TITLE,item.title)
+                val bundle = Bundle()
+                //bundle.putString(TITLE,item.title)
+                bundle.putInt("ID", item.id)
 
                 val topicDetailFragment = TopicDetailFragment()
                 topicDetailFragment.arguments = bundle
@@ -86,7 +78,7 @@ class TopicAdapter: ListAdapter<Topic, TopicAdapter.TopicViewHolder>(TopicDiffCa
 
 class TopicDiffCallback : DiffUtil.ItemCallback<Topic>() {
     override fun areItemsTheSame(oldItem: Topic, newItem: Topic): Boolean {
-        return oldItem.title == newItem.title
+        return oldItem.title == newItem.title && oldItem.description == newItem.description
     }
 
     override fun areContentsTheSame(oldItem: Topic, newItem: Topic): Boolean {
@@ -94,20 +86,5 @@ class TopicDiffCallback : DiffUtil.ItemCallback<Topic>() {
                 && oldItem.steps == newItem.steps
                 && oldItem.versionRange == newItem.versionRange
                 && oldItem.notes == newItem.notes
-    }
-}
-
-class MyListener(val context: Context): View.OnClickListener{
-    override fun onClick(item: View?) {
-        Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show()
-    }
-}
-
-class MyFragmentManager(): FragmentManager(){
-    init {
-
-    }
-    override fun beginTransaction(): FragmentTransaction {
-        return super.beginTransaction()
     }
 }

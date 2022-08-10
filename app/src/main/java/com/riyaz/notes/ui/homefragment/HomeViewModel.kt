@@ -1,10 +1,8 @@
-package com.riyaz.notes.ui
+package com.riyaz.notes.ui.homefragment
 
 import androidx.lifecycle.*
-import androidx.room.Query
 import com.riyaz.notes.data.entety.Topic
 import com.riyaz.notes.repository.TopicRepository
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 
 class HomeViewModel(val repository: TopicRepository) : ViewModel() {
@@ -12,17 +10,18 @@ class HomeViewModel(val repository: TopicRepository) : ViewModel() {
     val allTopics: LiveData<List<Topic>> = repository.topics.asLiveData()
 
     fun persistNewTopic(title: String, description: String){
-        val topic: Topic = Topic(title,description)
+        val topic= Topic(title,description)
         viewModelScope.launch {
             repository.insertTopic(topic)
         }
     }
 
-    fun deleteTopic(topic: Topic){
-        viewModelScope.launch {
-            repository.deleteTopic(topic)
-        }
-    }
+//    fun deleteTopic(topic: Topic){
+//        viewModelScope.launch {
+//            repository.deleteTopic(topic)
+//        }
+//    }
+
     fun searchTopics(query: String): LiveData<List<Topic>>{
         return repository.getSearchedTopic(query).asLiveData()
     }
@@ -34,5 +33,4 @@ class HomeFragmentViewModelFactory(var repository: TopicRepository): ViewModelPr
            return HomeViewModel(repository) as T
         } else throw IllegalArgumentException("ViewModel class is not assignable")
     }
-
 }

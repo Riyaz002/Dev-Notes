@@ -9,7 +9,7 @@ import androidx.versionedparcelable.ParcelField
 import java.io.Serializable
 
 
-@Entity
+@Entity(tableName = "step")
 data class Step(
     @PrimaryKey(autoGenerate = true) val id: Int? = null,
     @ColumnInfo(name="step_title") val title: String?,

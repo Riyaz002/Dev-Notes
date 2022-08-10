@@ -3,6 +3,7 @@ package com.riyaz.notes.repository
 import androidx.room.Query
 import androidx.room.Update
 import com.riyaz.notes.data.dao.TopicDao
+import com.riyaz.notes.data.entety.Note
 import com.riyaz.notes.data.entety.Step
 import com.riyaz.notes.data.entety.Topic
 import kotlinx.coroutines.DisposableHandle
@@ -25,20 +26,28 @@ class TopicRepository(private val topicDao: TopicDao) {
         topicDao.updateTopic(topic)
     }
 
-    suspend fun getTopic(title: String): Topic{
-        return topicDao.getTopic(title)
+    fun getTopic(id: Int): Flow<Topic>{
+        return topicDao.getTopic(id)
     }
 
 //    fun getSteps(title: String): Flow<List<Step>>{
 //        return topicDao.getSteps(title)
 //    }
 
-    suspend fun addStep(title: String, step: MutableList<Step>){
-        topicDao.addStep(title, step)
+    suspend fun addStep(id: Int, steps: List<Step>){
+        topicDao.addStep(id, steps)
+    }
+
+    suspend fun addNote(id: Int, notes: List<Note>){
+        topicDao.addNote(id, notes)
     }
 
 
     fun getSearchedTopic(query: String): Flow<List<Topic>>{
         return topicDao.getSearchTopics(query)
     }
+
+//    fun getSteps(title: String): Flow<List<Step>>{
+//        return topicDao.getSteps(title)
+//    }
 }

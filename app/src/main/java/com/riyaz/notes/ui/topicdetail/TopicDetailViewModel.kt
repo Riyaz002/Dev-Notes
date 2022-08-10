@@ -1,34 +1,19 @@
 package com.riyaz.notes.ui.topicdetail
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.riyaz.notes.data.entety.Step
 import com.riyaz.notes.data.entety.Topic
 import com.riyaz.notes.repository.TopicRepository
 import kotlinx.coroutines.launch
 
-class TopicDetailViewModel(private val repository: TopicRepository, title: String): ViewModel() {
+class TopicDetailViewModel(private val repository: TopicRepository, val id: Int): ViewModel() {
 
-    private val _topic = MutableLiveData<Topic>()
+    private val _topic = repository.getTopic(id).asLiveData()
     val topic: LiveData<Topic> get() = _topic
 
     private val steps = Transformations.map(topic){
         it.steps
     }
-
-    init {
-        getTopic(title)
-    }
-
-    private fun getTopic(title: String) {
-        viewModelScope.launch {
-            _topic.postValue(repository.getTopic(title))
-        }
-    }
-
-//    fun getSteps(): LiveData<List<Step>>{
-//        return repository.getSteps(topic.value!!.title).asLiveData()
-//    }
 
     fun deleteTopic(){
         viewModelScope.launch {
@@ -39,22 +24,28 @@ class TopicDetailViewModel(private val repository: TopicRepository, title: Strin
     }
 
     fun addStep(title: String, description: String) {
-        val list: MutableList<Step> = topic.value!!.steps?: mutableListOf<Step>()
-        var step = Step(title=title, explanation = description)
-        list.add(step)
+        val list: MutableList<Step> = createNewStepList(title, description)
 
-        Log.d("Step", "adding")
         viewModelScope.launch {
-                repository.addStep(topic.value!!.title, list)
-                Log.d("Step", "added")
+            repository.addStep(topic.value!!.id, list)
         }
+    }
+
+    private fun createNewStepList(
+        title: String,
+        description: String
+    ): MutableList<Step> {
+        val list: MutableList<Step> = topic.value!!.steps.toMutableList()
+        val step = Step(title = title, explanation = description)
+        list.add(step)
+        return list
     }
 }
 
-class TopicDetailViewModelFactory(private val repository: TopicRepository, val title: String): ViewModelProvider.Factory{
+class TopicDetailViewModelFactory(private val repository: TopicRepository, val id: Int): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(TopicDetailViewModel::class.java)){
-            return TopicDetailViewModel(repository, title) as T
+            return TopicDetailViewModel(repository, id) as T
         } else{
             throw IllegalArgumentException("ViewModel class is no assignable")
         }

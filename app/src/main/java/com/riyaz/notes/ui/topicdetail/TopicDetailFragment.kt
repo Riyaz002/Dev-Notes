@@ -1,36 +1,30 @@
 package com.riyaz.notes.ui.topicdetail
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.riyaz.notes.MainActivity
 import com.riyaz.notes.R
 import com.riyaz.notes.data.dao.TopicDao
 import com.riyaz.notes.data.database.TopicDatabase
 import com.riyaz.notes.databinding.FragmentTopicDetailBinding
-import com.riyaz.notes.databinding.TopicListItemBinding
 import com.riyaz.notes.repository.TopicRepository
-import com.riyaz.notes.ui.HomeFragment
+import com.riyaz.notes.ui.dialoguefragment.MyDialogueCallbackListener
 import com.riyaz.notes.ui.dialoguefragment.StepDialogueFragment
 import com.riyaz.notes.ui.notesfragment.NotesFragment
 
 const val TITLE = "title"
 const val DESCRIPTION = "description"
 
-class TopicDetailFragment : Fragment(), StepDialogueFragment.MyDialogueCallbackListener, DialogueOutsideTouchListeners {
+class TopicDetailFragment : Fragment(), MyDialogueCallbackListener, DialogueOutsideTouchListeners {
 
     private lateinit var binding: FragmentTopicDetailBinding
     private lateinit var dialogue: AlertDialog.Builder
@@ -74,12 +68,16 @@ class TopicDetailFragment : Fragment(), StepDialogueFragment.MyDialogueCallbackL
     }
 
     fun navigateToNotes(){
-        val notesFragment = NotesFragment()
+        val bundle = Bundle()
+        bundle.putInt("TopicID", viewModel.id)
+        val notesFragment = NotesFragment.newInstance()
+        notesFragment.arguments = bundle
+
         val activity = activity as MainActivity
         activity.supportFragmentManager.beginTransaction().addToBackStack("Note Fragment").replace(R.id.fragment_view, notesFragment).commit()
     }
 
-    fun showDialogue() {
+    fun showTopicDeleteDialogue() {
         if (!isDialogueOpen){
             dialogue.setTitle("Delete Topic?")
                 .setMessage("Once the topic is deleted, it cannot be retrieved")
@@ -91,18 +89,20 @@ class TopicDetailFragment : Fragment(), StepDialogueFragment.MyDialogueCallbackL
                     viewModel.deleteTopic()
                     isDialogueOpen=false
                     navigateBack()
-                }.create().show()
+                }
+                .create().show()
             isDialogueOpen=true
         }
     }
 
-    fun addStepDialogue(){
+    fun showAddStepDialogue(){
         if(!isDialogueOpen){
             val stepDialogueFragment = StepDialogueFragment()
             stepDialogueFragment.show(parentFragmentManager, null)
             isDialogueOpen=true
         }
     }
+
     private fun navigateBack() {
         val activity = activity as MainActivity
         activity.supportFragmentManager.popBackStack()
@@ -112,12 +112,13 @@ class TopicDetailFragment : Fragment(), StepDialogueFragment.MyDialogueCallbackL
         super.onActivityCreated(savedInstanceState)
         // TODO: Use the ViewModel
         val args = this.arguments
-        title = args?.get(TITLE).toString()
+        //title = args?.get("ID").toString()
+        val id: Int =  args?.get("ID") as Int
 
         topicDao = TopicDatabase.getDatabase(requireContext()).topicDao()
         repository = TopicRepository(topicDao)
 
-        viewModel = ViewModelProvider(this, TopicDetailViewModelFactory(repository, title))[TopicDetailViewModel::class.java]
+        viewModel = ViewModelProvider(this, TopicDetailViewModelFactory(repository, id))[TopicDetailViewModel::class.java]
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
@@ -131,20 +132,22 @@ class TopicDetailFragment : Fragment(), StepDialogueFragment.MyDialogueCallbackL
 
     }
 
-    override fun addStep(title: String, description: String) {
+    override fun create(title: String, description: String) {
         isDialogueOpen = false
-
-        if(title.isNotEmpty() && description.isNotEmpty()){
-            //Toast.makeText(requireContext(), "adding step", Toast.LENGTH_SHORT).show()
-            viewModel.addStep(title, description)
-        }
+        viewModel.addStep(title, description)
     }
 
     override fun touchedOutside() {
         isDialogueOpen=false
     }
+
+    override fun cancel() {
+        isDialogueOpen = false
+    }
 }
 
+
+//TODO: remove it if not useful
 interface DialogueOutsideTouchListeners{
     fun touchedOutside()
 }

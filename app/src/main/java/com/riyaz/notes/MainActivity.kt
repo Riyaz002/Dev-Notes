@@ -1,9 +1,8 @@
 package com.riyaz.notes
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.riyaz.notes.ui.HomeFragment
+import com.riyaz.notes.ui.homefragment.HomeFragment
 
 const val HOME_FRAGMENT_TAG="HOME FRAGMENT"
 class MainActivity : AppCompatActivity() {

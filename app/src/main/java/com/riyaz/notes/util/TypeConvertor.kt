@@ -1,6 +1,8 @@
 package com.riyaz.notes.util
 
+import android.util.Log
 import androidx.room.TypeConverter
+import com.riyaz.notes.data.entety.Note
 import com.riyaz.notes.data.entety.Step
 
 object TypeConvertor {
@@ -15,13 +17,14 @@ object TypeConvertor {
     }
 
     @TypeConverter
-    fun fromSteps(steps: List<Step>?): String?{
-        return steps?.joinToString("%step%")
+    fun fromSteps(steps: List<Step>): String?{
+        if (steps.isEmpty()) return "null"
+        return steps.joinToString("%step%")
     }
 
     @TypeConverter
-    fun toSteps(stepsString: String?): MutableList<Step>? {
-        if (stepsString == null) return null
+    fun toSteps(stepsString: String): List<Step> {
+        if (stepsString == "null") return mutableListOf()
         val list = stepsString.split("%step%")
         val stepList = mutableListOf<Step>()
         list.forEach { stepInString ->
@@ -41,5 +44,24 @@ object TypeConvertor {
             else stepList.add(Step(null, title, explanation))
         }
         return stepList.toMutableList()
+    }
+
+    @TypeConverter
+    fun fromNotes(notes: List<Note>): String{
+        if(notes.isEmpty()) return ""
+        Log.d("TYPE CONVERTOR", notes[0].id.toString())
+        return notes.joinToString("%note%")
+    }
+
+    @TypeConverter
+    fun toNotes(notes: String): List<Note>{
+        if(notes.isEmpty()) return listOf()
+        val list = mutableListOf<Note>()
+        notes.split("%note%").forEach { noteString ->
+            Log.d("TYPE CONVERTOR", noteString)
+            val content = noteString.substring(noteString.indexOf("content")+8 , noteString.lastIndexOf(")"))
+            list.add(Note(content))
+        }
+        return list
     }
 }

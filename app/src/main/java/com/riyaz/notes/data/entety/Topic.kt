@@ -1,18 +1,19 @@
 package com.riyaz.notes.data.entety
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
+import com.riyaz.notes.util.TypeConvertor
 
 @Entity(tableName="topic_table")
 data class Topic(
-    @PrimaryKey var title: String,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "notes") val notes: List<String?>?,
+    val notes: List<Note>,
     @ColumnInfo(name = "version_range") val versionRange: String?,
-    @ColumnInfo(name = "steps") val steps: MutableList<Step>?
+    val steps: List<Step>,
+    //TODO: get rid of nullability
 ){
-    constructor(title: String, description: String): this(title, description, null, null, null){}
-    constructor(title: String, description: String, steps: MutableList<Step>): this(title, description, null, null, steps){}
+
+    constructor(title: String, description: String): this(0,title, description, listOf(), null, mutableListOf()){}
+    constructor(title: String, description: String, steps: List<Step>): this(0, title, description, listOf(), null, steps){}
 }

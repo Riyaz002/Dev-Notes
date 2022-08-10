@@ -12,10 +12,13 @@
         <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/drawable/ic_round_add_24.xml" value="0.1055" />
         <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/drawable/round_corner_shape.xml" value="0.1" />
         <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/layout/add_note_dialogue.xml" value="0.22" />
         <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/layout/dialogue_layout.xml" value="0.22" />
         <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/layout/fragment_home.xml" value="0.3078125" />
         <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/layout/fragment_notes.xml" value="0.14666666666666667" />
+        <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/layout/fragment_step_detail.xml" value="0.1796875" />
         <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/layout/fragment_topic_detail.xml" value="0.22" />
+        <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/layout/note_item.xml" value="0.22" />
         <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/layout/step_dialogue_layout.xml" value="0.1796875" />
         <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/layout/steps_item.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/Home/AndroidStudioProjects/Dev-Notes/app/src/main/res/layout/topic_list_item.xml" value="0.26666666666666666" />

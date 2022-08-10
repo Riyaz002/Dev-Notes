@@ -8,6 +8,7 @@
     tools:context=".ui.notesfragment.NotesFragment">
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -25,7 +26,8 @@
             android:layout_marginTop="@dimen/spacing_normal"
             android:layout_marginBottom="@dimen/spacing_small"
             android:src="@drawable/ic_empty_folder"
-            app:tint="@color/primaryColor" />
+            app:tint="@color/primaryColor"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,6 +41,15 @@
             android:textSize="22sp" />
     </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/note_item" />
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,6 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_add_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"

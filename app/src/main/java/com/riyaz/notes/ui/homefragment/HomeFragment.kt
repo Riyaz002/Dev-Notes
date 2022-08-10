@@ -1,25 +1,24 @@
-package com.riyaz.notes.ui
+package com.riyaz.notes.ui.homefragment
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.riyaz.notes.R
 import com.riyaz.notes.data.database.TopicDatabase
 import com.riyaz.notes.databinding.FragmentHomeBinding
 import com.riyaz.notes.repository.TopicRepository
+import com.riyaz.notes.ui.TopicAdapter
+import com.riyaz.notes.ui.dialoguefragment.MyDialogueCallbackListener
 import com.riyaz.notes.ui.dialoguefragment.TopicDialogueFragment
 import com.riyaz.notes.ui.topicdetail.DialogueOutsideTouchListeners
 
-class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListener, SearchView.OnQueryTextListener, DialogueOutsideTouchListeners {
+class HomeFragment : Fragment(), MyDialogueCallbackListener, SearchView.OnQueryTextListener, DialogueOutsideTouchListeners {
 
     companion object {
         fun newInstance() = HomeFragment()
@@ -31,6 +30,7 @@ class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListene
     private lateinit var binding: FragmentHomeBinding
     private lateinit var topicAdapter: TopicAdapter
     private lateinit var layoutManager: LinearLayoutManager
+    private var isDialogOpen: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +42,7 @@ class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListene
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+
         binding.fab.setOnClickListener {
             showDialogue()
         }
@@ -56,8 +57,10 @@ class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListene
     }
 
     private fun showDialogue() {
-       val dialogFragment = TopicDialogueFragment()
-        dialogFragment.show(parentFragmentManager,"Topic Dialogue")
+        if(!isDialogOpen){
+            val dialogFragment = TopicDialogueFragment()
+            dialogFragment.show(parentFragmentManager,"Topic Dialogue")
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -65,7 +68,8 @@ class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListene
         // TODO: Use the ViewModel
         database = TopicDatabase.getDatabase(requireContext())
         repository = TopicRepository(database.topicDao())
-        viewModel = ViewModelProvider(this, HomeFragmentViewModelFactory(repository)).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this, HomeFragmentViewModelFactory(repository)).get(
+            HomeViewModel::class.java)
         observeTopics()
     }
 
@@ -77,8 +81,14 @@ class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListene
         })
     }
 
-    override fun createTopic(topic: String, description: String) {
+    //DialogueCallback
+    override fun create(topic: String, description: String) {
         viewModel.persistNewTopic(topic, description)
+    }
+
+    //DialogueCallback
+    override fun cancel() {
+        isDialogOpen = false
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -89,14 +99,17 @@ class HomeFragment : Fragment(), TopicDialogueFragment.MyDialogueCallbackListene
         searchView?.setOnQueryTextListener(this)
     }
 
+    //SearchView listener
     override fun onQueryTextSubmit(query: String?): Boolean {
         return true
     }
 
+    //SearchView listener
     override fun onQueryTextChange(query: String?): Boolean {
         searchTopics(query)
         return true
     }
+
     private fun searchTopics(query: String?){
         val searchQuery = "%$query%"
         viewModel.searchTopics(searchQuery).observe(viewLifecycleOwner, Observer {
