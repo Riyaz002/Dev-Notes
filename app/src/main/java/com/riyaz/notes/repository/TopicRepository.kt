@@ -22,17 +22,9 @@ class TopicRepository(private val topicDao: TopicDao) {
         topicDao.deleteTopic(topic)
     }
 
-    suspend fun updateTopic(topic: Topic){
-        topicDao.updateTopic(topic)
-    }
-
     fun getTopic(id: Int): Flow<Topic>{
         return topicDao.getTopic(id)
     }
-
-//    fun getSteps(title: String): Flow<List<Step>>{
-//        return topicDao.getSteps(title)
-//    }
 
     suspend fun addStep(id: Int, steps: List<Step>){
         topicDao.addStep(id, steps)
@@ -46,8 +38,4 @@ class TopicRepository(private val topicDao: TopicDao) {
     fun getSearchedTopic(query: String): Flow<List<Topic>>{
         return topicDao.getSearchTopics(query)
     }
-
-//    fun getSteps(title: String): Flow<List<Step>>{
-//        return topicDao.getSteps(title)
-//    }
 }

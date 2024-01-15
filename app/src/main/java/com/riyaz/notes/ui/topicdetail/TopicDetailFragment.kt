@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.riyaz.notes.MainActivity
 import com.riyaz.notes.R
+import com.riyaz.notes.core.constant.Page
+import com.riyaz.notes.core.router.RouteExecutionInterface
 import com.riyaz.notes.data.dao.TopicDao
 import com.riyaz.notes.data.database.TopicDatabase
 import com.riyaz.notes.databinding.FragmentTopicDetailBinding
@@ -42,6 +44,15 @@ class TopicDetailFragment : Fragment(), MyDialogueCallbackListener, DialogueOuts
 
     private lateinit var viewModel: TopicDetailViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val id: Int =  arguments?.getString("ID")?.toInt()!!
+        topicDao = TopicDatabase.getDatabase(requireContext()).topicDao()
+        repository = TopicRepository(topicDao)
+        viewModel = ViewModelProvider(this, TopicDetailViewModelFactory(repository, id))[TopicDetailViewModel::class.java]
+        viewModel.routeHandler = context as RouteExecutionInterface
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,24 +68,14 @@ class TopicDetailFragment : Fragment(), MyDialogueCallbackListener, DialogueOuts
         binding.stepsRecyclerView.adapter = adapter
         binding.stepsRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-//        viewModel.getSteps().observe(viewLifecycleOwner, Observer {
-//            it?.let { steps->
-//                adapter.list = steps
-//            }
-//        })
         dialogue = AlertDialog.Builder(context)
 
         return binding.root
     }
 
     fun navigateToNotes(){
-        val bundle = Bundle()
-        bundle.putInt("TopicID", viewModel.id)
-        val notesFragment = NotesFragment.newInstance()
-        notesFragment.arguments = bundle
-
-        val activity = activity as MainActivity
-        activity.supportFragmentManager.beginTransaction().addToBackStack("Note Fragment").replace(R.id.fragment_view, notesFragment).commit()
+        val parameters = hashMapOf<String, String>().also { it.put("TopicID", viewModel.id.toString()) }
+        viewModel.stateUpdater.openPage(Page.NOTES.id, parameters)
     }
 
     fun showTopicDeleteDialogue() {
@@ -111,14 +112,6 @@ class TopicDetailFragment : Fragment(), MyDialogueCallbackListener, DialogueOuts
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         // TODO: Use the ViewModel
-        val args = this.arguments
-        //title = args?.get("ID").toString()
-        val id: Int =  args?.get("ID") as Int
-
-        topicDao = TopicDatabase.getDatabase(requireContext()).topicDao()
-        repository = TopicRepository(topicDao)
-
-        viewModel = ViewModelProvider(this, TopicDetailViewModelFactory(repository, id))[TopicDetailViewModel::class.java]
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 

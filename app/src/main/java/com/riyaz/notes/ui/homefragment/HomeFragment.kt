@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.riyaz.notes.R
+import com.riyaz.notes.core.router.RouteExecutionInterface
 import com.riyaz.notes.data.database.TopicDatabase
 import com.riyaz.notes.databinding.FragmentHomeBinding
 import com.riyaz.notes.repository.TopicRepository
@@ -20,21 +20,21 @@ import com.riyaz.notes.ui.topicdetail.DialogueOutsideTouchListeners
 
 class HomeFragment : Fragment(), MyDialogueCallbackListener, SearchView.OnQueryTextListener, DialogueOutsideTouchListeners {
 
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
-
     private lateinit var viewModel: HomeViewModel
     private lateinit var database: TopicDatabase
     private lateinit var repository: TopicRepository
     private lateinit var binding: FragmentHomeBinding
     private lateinit var topicAdapter: TopicAdapter
-    private lateinit var layoutManager: LinearLayoutManager
     private var isDialogOpen: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        database = TopicDatabase.getDatabase(requireContext())
+        repository = TopicRepository(database.topicDao())
+        viewModel = ViewModelProvider(this, HomeFragmentViewModelFactory(repository)).get(
+            HomeViewModel::class.java)
+        viewModel.routeHandler = context as RouteExecutionInterface
     }
 
     override fun onCreateView(
@@ -47,11 +47,10 @@ class HomeFragment : Fragment(), MyDialogueCallbackListener, SearchView.OnQueryT
             showDialogue()
         }
 
-        layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        topicAdapter = TopicAdapter()
-
+        topicAdapter = TopicAdapter(viewModel.stateUpdater)
         binding.recyclerView.adapter = topicAdapter
-        binding.recyclerView.layoutManager = layoutManager
+
+        observeTopics()
 
         return binding.root
     }
@@ -61,16 +60,6 @@ class HomeFragment : Fragment(), MyDialogueCallbackListener, SearchView.OnQueryT
             val dialogFragment = TopicDialogueFragment()
             dialogFragment.show(parentFragmentManager,"Topic Dialogue")
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        // TODO: Use the ViewModel
-        database = TopicDatabase.getDatabase(requireContext())
-        repository = TopicRepository(database.topicDao())
-        viewModel = ViewModelProvider(this, HomeFragmentViewModelFactory(repository)).get(
-            HomeViewModel::class.java)
-        observeTopics()
     }
 
     private fun observeTopics() {

@@ -1,18 +1,36 @@
 package com.riyaz.notes.ui.topicdetail
 
 import androidx.lifecycle.*
+import com.riyaz.notes.core.router.RouteExecutionInterface
+import com.riyaz.notes.core.router.StateUpdater
 import com.riyaz.notes.data.entety.Step
 import com.riyaz.notes.data.entety.Topic
 import com.riyaz.notes.repository.TopicRepository
 import kotlinx.coroutines.launch
+import java.util.HashMap
 
 class TopicDetailViewModel(private val repository: TopicRepository, val id: Int): ViewModel() {
 
     private val _topic = repository.getTopic(id).asLiveData()
     val topic: LiveData<Topic> get() = _topic
 
-    private val steps = Transformations.map(topic){
-        it.steps
+    lateinit var routeHandler: RouteExecutionInterface
+
+    val stateUpdater = object : StateUpdater(){
+        override val routeHandler: RouteExecutionInterface
+            get() = object : RouteExecutionInterface{
+                override fun executePage(pageId: String, parameters: HashMap<String, String>) {
+                    this@TopicDetailViewModel.routeHandler.executePage(
+                        pageId,
+                        parameters
+                    )
+                }
+
+                override fun executeFunction() {
+                    this@TopicDetailViewModel.routeHandler.executeFunction()
+                }
+
+            }
     }
 
     fun deleteTopic(){

@@ -33,7 +33,7 @@ class StepDialogueFragment(): DialogFragment() {
         }
 
         val alertDialogBuilder = AlertDialog.Builder(activity)
-            alertDialogBuilder.setView(binding.root)
+        alertDialogBuilder.setView(binding.root)
                 .setTitle("Add Step")
                 .setNegativeButton("CANCEL", cancelListener())
                 .setPositiveButton("ADD", createListener())

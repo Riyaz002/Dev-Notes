@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.riyaz.notes.MainActivity
 import com.riyaz.notes.R
+import com.riyaz.notes.core.constant.Page
+import com.riyaz.notes.core.router.StateUpdater
 import com.riyaz.notes.data.entety.Topic
 import com.riyaz.notes.databinding.TopicListItemBinding
 import com.riyaz.notes.ui.topicdetail.TopicDetailFragment
@@ -17,23 +19,16 @@ import com.riyaz.notes.ui.topicdetail.TopicDetailFragment
 const val TITLE = "title"
 const val DESCRIPTION = "description"
 
-class TopicAdapter: ListAdapter<Topic, TopicAdapter.TopicViewHolder>(TopicDiffCallback()) {
+class TopicAdapter(val stateUpdater: StateUpdater) : ListAdapter<Topic, TopicAdapter.TopicViewHolder>(TopicDiffCallback()) {
 
-    class TopicViewHolder(private val binding: TopicListItemBinding): RecyclerView.ViewHolder(binding.root){
+    class TopicViewHolder(private val binding: TopicListItemBinding, val stateUpdater: StateUpdater): RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: Topic) {
             binding.topic = item
             binding.root.setOnClickListener {
-                //Toast.makeText(binding.root.context, "Topic: ${item.title}", Toast.LENGTH_SHORT).show()
-                val bundle = Bundle()
-                //bundle.putString(TITLE,item.title)
-                bundle.putInt("ID", item.id)
-
-                val topicDetailFragment = TopicDetailFragment()
-                topicDetailFragment.arguments = bundle
-
+                val parameters = hashMapOf<String, String>().also { it.put("ID", item.id.toString()) }
+                stateUpdater.openPage(Page.TDP.id, parameters)
                 val activity = binding.root.context as MainActivity
-                activity.supportFragmentManager.beginTransaction().replace(R.id.fragment_view, topicDetailFragment).addToBackStack("TopicDetailFragment").commit()
                 closeKeyboard(activity)
             }
         }
@@ -57,17 +52,17 @@ class TopicAdapter: ListAdapter<Topic, TopicAdapter.TopicViewHolder>(TopicDiffCa
         }
 
         companion object{
-            fun from(parent: ViewGroup): TopicViewHolder{
+            fun from(parent: ViewGroup, stateUpdater: StateUpdater): TopicViewHolder{
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding =
                     TopicListItemBinding.inflate(layoutInflater, parent, false)
-                return TopicViewHolder(binding)
+                return TopicViewHolder(binding, stateUpdater)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicViewHolder {
-        return TopicViewHolder.from(parent)
+        return TopicViewHolder.from(parent, stateUpdater)
     }
 
     override fun onBindViewHolder(holder: TopicViewHolder, position: Int) {
@@ -82,9 +77,9 @@ class TopicDiffCallback : DiffUtil.ItemCallback<Topic>() {
     }
 
     override fun areContentsTheSame(oldItem: Topic, newItem: Topic): Boolean {
-        return oldItem.description == newItem.description
-                && oldItem.steps == newItem.steps
-                && oldItem.versionRange == newItem.versionRange
-                && oldItem.notes == newItem.notes
+        return (oldItem.description == newItem.description
+                && (oldItem.steps == newItem.steps)
+                && (oldItem.versionRange == newItem.versionRange)
+                && (oldItem.notes == newItem.notes))
     }
 }

@@ -24,10 +24,6 @@ import com.riyaz.notes.repository.TopicRepository
 
 class NotesFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = NotesFragment()
-    }
-
     private lateinit var viewModel: NotesViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NoteAdapter
@@ -59,11 +55,9 @@ class NotesFragment : Fragment() {
                 } else{
                    viewModel.addNote(input.text.toString())
                 }
-            }
-            .setNegativeButton("CANCEL"){ dialogInterface, i ->
+            }.setNegativeButton("CANCEL"){ dialogInterface, i ->
                 dialogInterface.cancel()
-            }
-            .create()
+            }.create()
 
         dialog.show()
     }
@@ -81,7 +75,7 @@ class NotesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val database = TopicDatabase.getDatabase(requireContext())
         val repository = TopicRepository(database.topicDao())
-        val topicId = this.requireArguments().getInt("TopicID")
+        val topicId = arguments?.getString("TopicID")?.toInt()!!
         viewModel = ViewModelProvider(this, NotesViewModelProvider(repository, topicId))[NotesViewModel::class.java]
         observeNoteList()
     }
