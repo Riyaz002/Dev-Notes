@@ -2,7 +2,6 @@ package com.riyaz.notes.core.model
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.riyaz.notes.core.constant.Page
 import java.util.HashMap
 
 data class Page(

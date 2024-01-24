@@ -11,7 +11,7 @@ interface TopicDao {
 
     //TODO: since there can be two or more topics of same type, update WHERE clause to check for 'description' as well
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTopic(topic: Topic)
 
     @Delete
@@ -22,6 +22,10 @@ interface TopicDao {
 
     @Query("SELECT * FROM topic_table WHERE id==:id")
     fun getTopic(id: Int): Flow<Topic>
+
+    @Query("SELECT * FROM topic_table ORDER BY id DESC LIMIT 1")
+    fun getLastAdded(): Topic?
+
 
     @Query("SELECT * FROM topic_table")
     fun getAllTopics(): Flow<List<Topic>>

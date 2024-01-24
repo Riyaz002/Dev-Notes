@@ -10,18 +10,24 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.riyaz.notes.R
 import com.riyaz.notes.core.router.RouteExecutionInterface
+import com.riyaz.notes.data.dao.TopicDao
 import com.riyaz.notes.data.database.TopicDatabase
 import com.riyaz.notes.databinding.FragmentHomeBinding
 import com.riyaz.notes.repository.TopicRepository
+import com.riyaz.notes.ui.MainActivity
 import com.riyaz.notes.ui.TopicAdapter
 import com.riyaz.notes.ui.dialoguefragment.MyDialogueCallbackListener
 import com.riyaz.notes.ui.dialoguefragment.TopicDialogueFragment
 import com.riyaz.notes.ui.topicdetail.DialogueOutsideTouchListeners
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class HomeFragment : Fragment(), MyDialogueCallbackListener, SearchView.OnQueryTextListener, DialogueOutsideTouchListeners {
+
+@AndroidEntryPoint
+class HomeFragment : Fragment(), MyDialogueCallbackListener, SearchView.OnQueryTextListener {
 
     private lateinit var viewModel: HomeViewModel
-    private lateinit var database: TopicDatabase
+    @Inject lateinit var dao: TopicDao
     private lateinit var repository: TopicRepository
     private lateinit var binding: FragmentHomeBinding
     private lateinit var topicAdapter: TopicAdapter
@@ -30,11 +36,10 @@ class HomeFragment : Fragment(), MyDialogueCallbackListener, SearchView.OnQueryT
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        database = TopicDatabase.getDatabase(requireContext())
-        repository = TopicRepository(database.topicDao())
+        repository = TopicRepository(dao)
         viewModel = ViewModelProvider(this, HomeFragmentViewModelFactory(repository)).get(
             HomeViewModel::class.java)
-        viewModel.routeHandler = context as RouteExecutionInterface
+        viewModel.routeHandler = requireActivity() as RouteExecutionInterface
     }
 
     override fun onCreateView(
@@ -108,8 +113,6 @@ class HomeFragment : Fragment(), MyDialogueCallbackListener, SearchView.OnQueryT
         })
     }
 
-    override fun touchedOutside() {
 
-    }
 }
 

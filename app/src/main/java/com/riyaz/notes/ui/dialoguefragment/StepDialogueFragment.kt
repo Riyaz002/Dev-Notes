@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import com.riyaz.notes.MainActivity
+import com.riyaz.notes.ui.MainActivity
 import com.riyaz.notes.R
 import com.riyaz.notes.databinding.DialogueLayoutBinding
 import com.riyaz.notes.ui.topicdetail.DialogueOutsideTouchListeners

@@ -13,17 +13,4 @@ import com.riyaz.notes.util.TypeConvertor
 abstract class TopicDatabase: RoomDatabase() {
     abstract fun topicDao(): TopicDao
 
-    companion object{
-        @Volatile var INSTANCE: TopicDatabase? = null
-
-        fun getDatabase(context: Context): TopicDatabase{
-            return INSTANCE ?: synchronized(this){
-                val instance = Room
-                    .databaseBuilder(context.applicationContext, TopicDatabase::class.java, "topic")
-                    .build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
 }

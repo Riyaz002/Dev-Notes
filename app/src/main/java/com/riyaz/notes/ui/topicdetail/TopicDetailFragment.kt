@@ -11,9 +11,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.riyaz.notes.MainActivity
+import com.riyaz.notes.ui.MainActivity
 import com.riyaz.notes.R
-import com.riyaz.notes.core.constant.Page
+import com.riyaz.notes.core.enums.Page
 import com.riyaz.notes.core.router.RouteExecutionInterface
 import com.riyaz.notes.data.dao.TopicDao
 import com.riyaz.notes.data.database.TopicDatabase
@@ -21,22 +21,21 @@ import com.riyaz.notes.databinding.FragmentTopicDetailBinding
 import com.riyaz.notes.repository.TopicRepository
 import com.riyaz.notes.ui.dialoguefragment.MyDialogueCallbackListener
 import com.riyaz.notes.ui.dialoguefragment.StepDialogueFragment
-import com.riyaz.notes.ui.notesfragment.NotesFragment
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 const val TITLE = "title"
 const val DESCRIPTION = "description"
 
+@AndroidEntryPoint
 class TopicDetailFragment : Fragment(), MyDialogueCallbackListener, DialogueOutsideTouchListeners {
 
     private lateinit var binding: FragmentTopicDetailBinding
     private lateinit var dialogue: AlertDialog.Builder
-    private lateinit var topicDao: TopicDao
+    @Inject lateinit var topicDao: TopicDao
     private lateinit var repository: TopicRepository
-    private lateinit var title: String
     private lateinit var adapter: StepsAdapter
     private lateinit var layoutManager: LinearLayoutManager
-
-    var isDialogueOpen = false
 
     companion object {
         fun newInstance() = TopicDetailFragment()
@@ -47,10 +46,9 @@ class TopicDetailFragment : Fragment(), MyDialogueCallbackListener, DialogueOuts
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val id: Int =  arguments?.getString("ID")?.toInt()!!
-        topicDao = TopicDatabase.getDatabase(requireContext()).topicDao()
         repository = TopicRepository(topicDao)
         viewModel = ViewModelProvider(this, TopicDetailViewModelFactory(repository, id))[TopicDetailViewModel::class.java]
-        viewModel.routeHandler = context as RouteExecutionInterface
+        viewModel.routeHandler = requireActivity() as RouteExecutionInterface
     }
 
     override fun onCreateView(
@@ -79,29 +77,21 @@ class TopicDetailFragment : Fragment(), MyDialogueCallbackListener, DialogueOuts
     }
 
     fun showTopicDeleteDialogue() {
-        if (!isDialogueOpen){
             dialogue.setTitle("Delete Topic?")
                 .setMessage("Once the topic is deleted, it cannot be retrieved")
                 .setNegativeButton("NO"){ dialogInterface, i ->
                     dialogInterface.dismiss()
-                    isDialogueOpen=false
                 }
                 .setPositiveButton("YES"){ dialogueInterface, i ->
                     viewModel.deleteTopic()
-                    isDialogueOpen=false
                     navigateBack()
                 }
                 .create().show()
-            isDialogueOpen=true
-        }
     }
 
     fun showAddStepDialogue(){
-        if(!isDialogueOpen){
-            val stepDialogueFragment = StepDialogueFragment()
-            stepDialogueFragment.show(parentFragmentManager, null)
-            isDialogueOpen=true
-        }
+        val stepDialogueFragment = StepDialogueFragment()
+        stepDialogueFragment.show(parentFragmentManager, null)
     }
 
     private fun navigateBack() {
@@ -126,16 +116,15 @@ class TopicDetailFragment : Fragment(), MyDialogueCallbackListener, DialogueOuts
     }
 
     override fun create(title: String, description: String) {
-        isDialogueOpen = false
         viewModel.addStep(title, description)
     }
 
     override fun touchedOutside() {
-        isDialogueOpen=false
+        //isDialogueOpen=false
     }
 
     override fun cancel() {
-        isDialogueOpen = false
+        //isDialogueOpen = false
     }
 }
 

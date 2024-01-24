@@ -1,5 +1,7 @@
 package com.riyaz.notes.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.room.Query
 import androidx.room.Update
 import com.riyaz.notes.data.dao.TopicDao
@@ -10,32 +12,33 @@ import kotlinx.coroutines.DisposableHandle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
-class TopicRepository(private val topicDao: TopicDao) {
+class TopicRepository(private val topicDao: TopicDao): TopicRepositoryInterface {
 
-    val topics: Flow<List<Topic>> = topicDao.getAllTopics()
-
-    suspend fun insertTopic(topic: Topic){
+    override suspend fun insertTopic(topic: Topic){
         topicDao.addTopic(topic)
     }
 
-    suspend fun deleteTopic(topic: Topic){
+    override fun getAllTopics(): LiveData<List<Topic>>{
+        return topicDao.getAllTopics().asLiveData()
+    }
+
+    override suspend fun deleteTopic(topic: Topic){
         topicDao.deleteTopic(topic)
     }
 
-    fun getTopic(id: Int): Flow<Topic>{
+    override fun getTopic(id: Int): Flow<Topic>{
         return topicDao.getTopic(id)
     }
 
-    suspend fun addStep(id: Int, steps: List<Step>){
+    override suspend fun addStep(id: Int, steps: List<Step>){
         topicDao.addStep(id, steps)
     }
 
-    suspend fun addNote(id: Int, notes: List<Note>){
+    override suspend fun addNote(id: Int, notes: List<Note>){
         topicDao.addNote(id, notes)
     }
 
-
-    fun getSearchedTopic(query: String): Flow<List<Topic>>{
+    override fun getSearchedTopic(query: String): Flow<List<Topic>>{
         return topicDao.getSearchTopics(query)
     }
 }
