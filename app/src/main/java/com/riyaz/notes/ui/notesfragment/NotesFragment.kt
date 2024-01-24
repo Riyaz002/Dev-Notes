@@ -19,15 +19,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.riyaz.notes.R
+import com.riyaz.notes.data.dao.TopicDao
 import com.riyaz.notes.data.database.TopicDatabase
 import com.riyaz.notes.repository.TopicRepository
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class NotesFragment : Fragment() {
 
     private lateinit var viewModel: NotesViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NoteAdapter
     private lateinit var btnAddNote: FloatingActionButton
+    @Inject lateinit var dao: TopicDao
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,8 +79,7 @@ class NotesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val database = TopicDatabase.getDatabase(requireContext())
-        val repository = TopicRepository(database.topicDao())
+        val repository = TopicRepository(dao)
         val topicId = arguments?.getString("TopicID")?.toInt()!!
         viewModel = ViewModelProvider(this, NotesViewModelProvider(repository, topicId))[NotesViewModel::class.java]
         observeNoteList()

@@ -1,4 +1,4 @@
-package com.riyaz.notes.core.constant
+package com.riyaz.notes.core.enums
 
 enum class Page(val id: String) {
     HP("home"),

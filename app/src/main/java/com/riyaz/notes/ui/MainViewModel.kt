@@ -1,4 +1,4 @@
-package com.riyaz.notes
+package com.riyaz.notes.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,7 @@ import com.riyaz.notes.core.router.RouteExecutionInterface
 import com.riyaz.notes.core.router.StateUpdater
 import com.riyaz.notes.util.PageUtil
 import java.util.HashMap
-import com.riyaz.notes.core.constant.Page as PageID
+import com.riyaz.notes.core.enums.Page as PageID
 
 class MainViewModel: ViewModel() {
     private var _currentPage: MutableLiveData<Page> = MutableLiveData<Page>(Page(PageID.HP.id ,PageUtil.getPage(PageID.HP.id)))

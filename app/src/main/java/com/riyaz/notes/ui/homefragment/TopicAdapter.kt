@@ -1,6 +1,5 @@
 package com.riyaz.notes.ui
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -8,13 +7,10 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.riyaz.notes.MainActivity
-import com.riyaz.notes.R
-import com.riyaz.notes.core.constant.Page
+import com.riyaz.notes.core.enums.Page
 import com.riyaz.notes.core.router.StateUpdater
 import com.riyaz.notes.data.entety.Topic
 import com.riyaz.notes.databinding.TopicListItemBinding
-import com.riyaz.notes.ui.topicdetail.TopicDetailFragment
 
 const val TITLE = "title"
 const val DESCRIPTION = "description"
@@ -28,8 +24,8 @@ class TopicAdapter(val stateUpdater: StateUpdater) : ListAdapter<Topic, TopicAda
             binding.root.setOnClickListener {
                 val parameters = hashMapOf<String, String>().also { it.put("ID", item.id.toString()) }
                 stateUpdater.openPage(Page.TDP.id, parameters)
-                val activity = binding.root.context as MainActivity
-                closeKeyboard(activity)
+//                val activity = binding.root.context as MainActivity
+//                closeKeyboard(activity)
             }
         }
 

@@ -5,12 +5,13 @@ import com.riyaz.notes.core.router.RouteExecutionInterface
 import com.riyaz.notes.core.router.StateUpdater
 import com.riyaz.notes.data.entety.Topic
 import com.riyaz.notes.repository.TopicRepository
+import com.riyaz.notes.repository.TopicRepositoryInterface
 import kotlinx.coroutines.launch
 import java.util.HashMap
 
-class HomeViewModel(private val repository: TopicRepository) : ViewModel() {
+class HomeViewModel(private val repository: TopicRepositoryInterface) : ViewModel() {
 
-    val allTopics: LiveData<List<Topic>> = repository.topics.asLiveData()
+    val allTopics: LiveData<List<Topic>> = repository.getAllTopics()
 
     lateinit var routeHandler: RouteExecutionInterface
 
@@ -28,7 +29,6 @@ class HomeViewModel(private val repository: TopicRepository) : ViewModel() {
                     this@HomeViewModel.routeHandler
                 }
             }
-
     }
 
     fun persistNewTopic(title: String, description: String){
@@ -43,7 +43,7 @@ class HomeViewModel(private val repository: TopicRepository) : ViewModel() {
     }
 }
 
-class HomeFragmentViewModelFactory(var repository: TopicRepository): ViewModelProvider.Factory{
+class HomeFragmentViewModelFactory(var repository: TopicRepositoryInterface): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(HomeViewModel::class.java)) {
            return HomeViewModel(repository) as T

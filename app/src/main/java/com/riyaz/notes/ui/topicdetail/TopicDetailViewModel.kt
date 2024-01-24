@@ -12,6 +12,7 @@ import java.util.HashMap
 class TopicDetailViewModel(private val repository: TopicRepository, val id: Int): ViewModel() {
 
     private val _topic = repository.getTopic(id).asLiveData()
+
     val topic: LiveData<Topic> get() = _topic
 
     lateinit var routeHandler: RouteExecutionInterface
